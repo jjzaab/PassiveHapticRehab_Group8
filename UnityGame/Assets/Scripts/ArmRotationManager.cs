@@ -5,17 +5,23 @@ using UnityEngine.UIElements;
 
 public class ArmRotationManager : MonoBehaviour
 {
+    /* SINGLTON */
+    private static ArmRotationManager instance = null;
+    public static ArmRotationManager Instance { get { return instance; } }
+
     /* OBJECT REFERENCES */
     [Header("Object References")]
     public TMP_Text angleText;          /* Reference to the text that will display the angle reading*/
     public Transform armPivot;          /* Reference to the pivot point that will rotate the farmer's arm */
+    public RectTransform meterTargPivot;/* Reference to the pivot that will rotate the bend target */
     public RectTransform meterPivot;    /* Reference to the pivot point that will adjust the rotation bar */
 
     /* INPUT DATA */
     [Header("Input Data")]
+    public bool readInputs = false;
     public float elbowAngle = 0f;                   /* The current elbow-angle reading of the player */
     public bool smoothInputStream;                  /* Should an averaging algorithm be applied to the input stream */
- 
+
     /* DATA CONSTRAINTS*/
     // NOTE: THE PURPOSE OF THESE CONTRAINTS IS TO ADJUST THE DIFFICULT...THEY ALLOW THE MAXIMUM INPUT VALUE TO BE DECREASED WHICH WOULD HELP
     // IMPAIRED PLAYERS DO WELL IN THE GAME
@@ -25,7 +31,7 @@ public class ArmRotationManager : MonoBehaviour
     public float elbowReading_maxMapping = 180f;    /* What real-world value of the elbow angle will map to the maximum value for game mechanics */
 
     /* PRIVATE VARIABLES */ 
-    private const int dataFrameSize = 20;
+    private const int dataFrameSize = 50;
     private int dataPointsStored = 0;
     private float[] dataFrame = new float[dataFrameSize];
     private float minFarmerArmRotation = 0f;
@@ -34,10 +40,17 @@ public class ArmRotationManager : MonoBehaviour
     private float elbowStretch;
 
     private void Start( ) {
-        UpdateGameGraphicsFromElbowAngle();
+        if (instance == null )
+            instance = this;
+
+        if (readInputs)
+            UpdateGameGraphicsFromElbowAngle();
     }
 
     private void Update( ) {
+        // Do nothing if player input shouldn't be read
+        if (!readInputs)
+            return;
 
         // Get the computed angle of the elbow
         elbowAngle = GameManager.Instance.DataReceiver.getLeftElbowExtensionAngle();
@@ -89,4 +102,13 @@ public class ArmRotationManager : MonoBehaviour
         armPivot.rotation = Quaternion.AngleAxis(Mathf.Lerp(minFarmerArmRotation, maxFarmerArmRotation, elbowStretch), Vector3.forward);
     }
 
+
+    public void SetBendTarget(float value, bool fromTop) {
+        float val = fromTop ? 1 : -1;
+        meterTargPivot.rotation = Quaternion.AngleAxis(val * Mathf.Lerp(minProgressBarAngle, maxProgressBarAngle, value), Vector3.forward);
+    }
+
+    public float GetElbowStretch() {
+        return elbowStretch;
+    }
 }

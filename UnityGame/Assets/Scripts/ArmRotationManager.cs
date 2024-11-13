@@ -18,7 +18,7 @@ public class ArmRotationManager : MonoBehaviour
 
     /* INPUT DATA */
     [Header("Input Data")]
-    public bool readInputs = false;
+    public bool readInputs;
     public float elbowAngle = 0f;                   /* The current elbow-angle reading of the player */
     public bool smoothInputStream;                  /* Should an averaging algorithm be applied to the input stream */
 
@@ -39,10 +39,12 @@ public class ArmRotationManager : MonoBehaviour
     private float maxProgressBarAngle = 0f;   // The angle should be 0 when the bar should be full, or the elbow is stretched to the maximum
     private float elbowStretch;
 
-    private void Start( ) {
+    private void Awake( ) {
         if (instance == null )
-            instance = this;
+            instance = this;        
+    }
 
+    private void Start( ) {
         if (readInputs)
             UpdateGameGraphicsFromElbowAngle();
     }
@@ -78,7 +80,7 @@ public class ArmRotationManager : MonoBehaviour
             }
             elbowAngle /= dataPointsStored;
         }
-        Debug.Log(elbowAngle);
+
         UpdateGameGraphicsFromElbowAngle();
     }
 

@@ -145,7 +145,8 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      instructionGif_bkg_0: -2238917628743183309
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

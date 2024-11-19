@@ -20,6 +20,7 @@ class UnityAPI {
         GAME_1,
         GAME_2,
         GAME_4,
+        ELBOW_EXTENSION_FLEXION,
         None
     }
 
@@ -56,6 +57,13 @@ class UnityAPI {
                     )
                 }
 
+                Scene.ELBOW_EXTENSION_FLEXION -> {
+                    UnityPlayer.UnitySendMessage(
+                        "GameManager", "ReceiveCommand", if (pause) "pload Elbow_ExtensionFlexion" else "load Elbow_ExtensionFlexion"
+                    )
+                }
+
+
                 Scene.None -> {
                     // Do nothing
                 }
@@ -79,6 +87,12 @@ class UnityAPI {
                 Scene.GAME_4 -> {
                     UnityPlayer.UnitySendMessage(
                         "GameManager", "ReceiveCommand", if (pause) "pload Game4" else "load Game4"
+                    )
+                }
+
+                Scene.ELBOW_EXTENSION_FLEXION -> {
+                    UnityPlayer.UnitySendMessage(
+                        "GameManager", "ReceiveCommand", if (pause) "pload Elbow_ExtensionFlexion" else "load Elbow_ExtensionFlexion"
                     )
                 }
 

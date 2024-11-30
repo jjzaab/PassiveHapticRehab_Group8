@@ -199,6 +199,10 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Game2"); // Load the game scene
     }
 
+    public void StartGame_ElbowExtensionFlexion() {
+        SceneManager.LoadScene("Elbow_ExtensionFlexion");
+    }
+
     // Function to pause the game.
     public void PauseGame()
     {
